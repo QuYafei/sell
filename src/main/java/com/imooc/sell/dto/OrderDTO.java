@@ -1,24 +1,23 @@
-package com.imooc.sell.dataobject;
+package com.imooc.sell.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.imooc.sell.dataobject.OrderDetail;
 import com.imooc.sell.enums.OrderStatusEnum;
 import com.imooc.sell.enums.PayStatusEnum;
+import com.imooc.sell.utils.serializer.Date2LongSerializer;
 import lombok.Data;
-import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Transient;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Entity
 @Data
-@DynamicUpdate
-public class OrderMaster {
-    @Id
+//@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+//@JsonInclude(JsonInclude.Include.NON_NULL) 字段为null的话 同意不返回
+public class OrderDTO {
     private String orderId;
-
     /**
      * 买家名字
      */
@@ -54,11 +53,21 @@ public class OrderMaster {
     /**
      * 创建时间
      */
+    @JsonSerialize(using = Date2LongSerializer.class)
     private Date createTime;
 
     /**
      * 更新时间
      */
+    @JsonSerialize(using = Date2LongSerializer.class)
     private Date updateTime;
+
+    /**
+     * 针对字段返回值
+     * 如果必须让他返回但又不能为null
+     * 那就给他赋一个初始值
+     */
+    List<OrderDetail> orderDetailList;
+
 
 }
